@@ -1,8 +1,8 @@
 ﻿<!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Arquitectura - Nemotron Superior</title>
+    <title>Architecture - Nemotron Superior</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; max-width: 1200px; margin: 0 auto; padding: 40px; background: #f5f5f5; }
         h1 { color: #1a1a2e; border-bottom: 3px solid #4caf50; padding-bottom: 10px; }
@@ -12,36 +12,36 @@
     </style>
 </head>
 <body>
-    <h1>🏗️ Arquitectura de Nemotron Superior</h1>
+    <h1>🏗️ Nemotron Superior Architecture</h1>
     <p><span class="badge">Clean Architecture</span><span class="badge">Hexagonal</span><span class="badge">Event-Driven</span></p>
 
     <div class="diagram">
-        <h2>📐 Diagrama de Contexto</h2>
+        <h2>📐 Context Diagram</h2>
         <pre>
 ┌─────────────────────────────────────────────────────────────┐
-│                     Usuario / Aplicación IA                  │
+│                     User / AI Application                    │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                   NEMOTRON SUPERIOR API                      │
 │  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────────────┐   │
-│  │ FastAPI │ │ Worker  │ │ Caché   │ │ Auditoría GDPR  │   │
+│  │ FastAPI │ │ Worker  │ │ Cache   │ │ GDPR Audit      │   │
 │  │ (Async) │ │ Pool    │ │ (Redis) │ │ (PostgreSQL)    │   │
 │  └─────────┘ └─────────┘ └─────────┘ └─────────────────┘   │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
-│              Modelo Nemotron (API externa)                   │
+│              Nemotron Model (External API)                   │
 └─────────────────────────────────────────────────────────────┘
         </pre>
     </div>
 
     <div class="diagram">
-        <h2>🔄 Flujo Asíncrono con Worker Pool</h2>
+        <h2>🔄 Async Flow with Worker Pool</h2>
         <pre>
-Cliente → API → Redis Queue → Worker Pool → Modelo → Caché → Respuesta
+Client → API → Redis Queue → Worker Pool → Model → Cache → Response
               ↓                              ↓
           task_id                        PostgreSQL
               ↓
@@ -50,23 +50,23 @@ Cliente → API → Redis Queue → Worker Pool → Modelo → Caché → Respue
     </div>
 
     <div class="diagram">
-        <h2>🗄️ Modelo de Datos Bitemporal (GDPR)</h2>
+        <h2>🗄️ Bitemporal Data Model (GDPR)</h2>
         <pre>
-Tabla: prompts
+Table: prompts
 ├── id (UUID)
 ├── content (TEXT)
-├── valid_from (TIMESTAMP)  ← inicio vigencia
-├── valid_to (TIMESTAMP)    ← NULL = vigente actual
+├── valid_from (TIMESTAMP)  ← validity start
+├── valid_to (TIMESTAMP)    ← NULL = currently valid
 └── deleted_at (TIMESTAMP)  ← soft delete
 
-Cada cambio crea una NUEVA fila con valid_to actualizado.
+Each change creates a NEW row with updated valid_to.
         </pre>
     </div>
 
     <footer>
-        <a href="api_es.html">← Volver a API</a> | 
-        <a href="https://github.com/dwight-trujillo/nemotron-superior">GitHub</a>
-    <a href="architecture_en.html">🇺🇸 English</a> | </footer>
+        <a href="api_en.html">← Back to API</a> | 
+        <a href="https://github.com/dwight-trujillo/nemotron-superior">GitHub</a> |
+        <a href="architecture_es.html">🇪🇸 Español</a>
+    </footer>
 </body>
 </html>
-
