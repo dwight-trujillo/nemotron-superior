@@ -2,22 +2,197 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nemotron Superior - Documentación API</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 1000px; margin: 0 auto; padding: 40px; background: #f5f5f5; }
-        h1 { color: #1a1a2e; border-bottom: 3px solid #4caf50; padding-bottom: 10px; }
-        .endpoint { background: white; border-radius: 12px; padding: 20px; margin: 20px 0; }
-        .method { display: inline-block; padding: 4px 12px; border-radius: 6px; font-weight: bold; margin-right: 10px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1a1a2e; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header { background: linear-gradient(135deg, #1a1a2e, #16213e); color: white; padding: 40px 20px; text-align: center; border-radius: 10px 10px 0 0; }
+        h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .lang-switch { position: fixed; top: 20px; right: 20px; background: #1a1a2e; color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; }
+        .endpoint { background: white; border-radius: 12px; margin: 20px 0; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .method { display: inline-block; padding: 4px 12px; border-radius: 6px; font-weight: bold; font-size: 0.85rem; margin-right: 10px; }
         .method.post { background: #4caf50; color: white; }
+        .method.get { background: #2196f3; color: white; }
+        .method.delete { background: #f44336; color: white; }
+        .path { font-family: monospace; font-size: 1.2rem; font-weight: bold; }
+        pre { background: #1e1e2e; color: #c9d1d9; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+        code { font-family: 'Courier New', monospace; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #1a1a2e; color: white; }
+        .sidebar { position: fixed; left: 0; top: 0; width: 250px; height: 100vh; background: #1a1a2e; color: white; padding: 20px; overflow-y: auto; transform: translateX(-100%); transition: transform 0.3s; z-index: 1000; }
+        .sidebar.open { transform: translateX(0); }
+        .menu-btn { position: fixed; left: 20px; top: 20px; background: #1a1a2e; color: white; padding: 10px 15px; border-radius: 8px; cursor: pointer; z-index: 1001; }
+        @media (min-width: 768px) { .sidebar { transform: translateX(0); } .menu-btn { display: none; } }
+        footer { text-align: center; padding: 30px; margin-top: 40px; background: #1a1a2e; color: white; border-radius: 10px; }
+        a { color: white; }
     </style>
 </head>
 <body>
-    <h1>🚀 Nemotron Superior API</h1>
-    <p>Plataforma de IA Agentic con caché semántica, cumplimiento GDPR y 200 req/s</p>
-    <div class="endpoint">
-        <h2><span class="method post">POST</span> /v1/prompts/execute</h2>
-        <p>Ejecuta un prompt de forma síncrona.</p>
+    <div class="menu-btn" onclick="toggleSidebar()">☰ Menu</div>
+    <div class="sidebar" id="sidebar">
+        <h3>📚 Navegación</h3>
+        <ul style="list-style: none; margin-top: 20px;">
+            <li><a href="#intro" style="color: #fff; text-decoration: none;">📖 Introducción</a></li>
+            <li><a href="#auth" style="color: #fff; text-decoration: none;">🔐 Autenticación</a></li>
+            <li><a href="#execute" style="color: #fff; text-decoration: none;">⚡ Ejecutar Prompt</a></li>
+            <li><a href="#async" style="color: #fff; text-decoration: none;">🔄 Envío Asíncrono</a></li>
+            <li><a href="#batch" style="color: #fff; text-decoration: none;">📦 Ejecución por Lotes</a></li>
+            <li><a href="#audit" style="color: #fff; text-decoration: none;">📋 Registros de Auditoría</a></li>
+            <li><a href="#gdpr" style="color: #fff; text-decoration: none;">🗑️ Eliminación GDPR</a></li>
+            <li><a href="#health" style="color: #fff; text-decoration: none;">❤️ Verificación de Salud</a></li>
+            <li><a href="#errors" style="color: #fff; text-decoration: none;">⚠️ Códigos de Error</a></li>
+        </ul>
     </div>
-    <footer><a href="api_en.html">English</a> | <a href="https://github.com/dwight-trujillo/nemotron-superior">GitHub</a></footer>
+
+    <div class="container">
+        <header>
+            <h1>🚀 Nemotron Superior API</h1>
+            <p>Servicio de Inferencia de IA Agentic with Caché Semántica, Registro de Auditoría & Cumplimiento GDPR</p>
+            <p><strong>Version:</strong> 2.0.0 | <strong>Base URL:</strong> <code>https://api.nemotron-superior.io/v1</code></p>
+        </header>
+
+        <div class="endpoint" id="intro">
+            <h2>📖 Introducción</h2>
+            <p>La API de Nemotron Superior proporciona inferencia de alto rendimiento y baja latencia for Nemotron family models with built-in semantic caching, Ejecución de herramientas, comprehensive audit logging, and GDPR-compliant data management.</p>
+            <h3>Características Clave</h3>
+            <ul>
+                <li>✅ <strong>200 req/s</strong> rendimiento sostenido (1,000 req/s ráfaga)</li>
+                <li>✅ <strong>Caché Semántica</strong> with FAISS HNSW (463x más rápido que fuerza bruta)</li>
+                <li>✅ <strong>Ejecución de herramientas</strong> (calculator, web search, weather, database)</li>
+                <li>✅ <strong>Cumplimiento GDPR</strong> with TTL, soft-delete, and derecho al olvido</li>
+                <li>✅ <strong>Bitemporal Registros de Auditoría</strong> with AES-256 cifrado en reposo</li>
+            </ul>
+        </div>
+
+        <div class="endpoint" id="auth">
+            <h2>🔐 Autenticación</h2>
+            <p>Todos los endpoints excepto <code>/health</code> and <code>/ready</code> require JWT Bearer Autenticación.</p>
+            <pre><code>Authorization: Bearer &lt;your-jwt-token&gt;</code></pre>
+            <p>Para obtener un token, contacta a tu administrador. Los tokens expiran después de 60 minutes.</p>
+        </div>
+
+        <div class="endpoint" id="execute">
+            <h2>⚡ POST /v1/prompts/execute</h2>
+            <p><span class="method post">POST</span> <span class="path">/v1/prompts/execute</span></p>
+            <p>Ejecuta un prompt de forma síncrona. Devuelve la respuesta del modelo inmediatamente.</p>
+            
+            <h3>Cuerpo de la Petición</h3>
+            <pre><code>{
+  "user_id": "550e8400-e29b-41d4-a716-446655440000",
+  "content": "What is the capital of France?",
+  "session_id": "optional-uuid",
+  "tools_enabled": ["calculator", "web_search"],
+  "temperature": 0.7,
+  "max_tokens": 4096,
+  "bypass_cache": false
+}</code></pre>
+
+            <h3>Respuesta (200 OK)</h3>
+            <pre><code>{
+  "success": true,
+  "prompt_id": "123e4567-e89b-12d3-a456-426614174000",
+  "Respuesta_content": "The capital of France is Paris.",
+  "model_used": "nemotron-3-super",
+  "tokens_input": 15,
+  "tokens_output": 8,
+  "latency_ms": 123,
+  "from_cache": false,
+  "tool_calls": [],
+  "timestamp": "2024-01-15T10:30:00Z"
+}</code></pre>
+
+            <h3>Límite de Tasa</h3>
+            <p>100 peticiones por minuto per IP/user.</p>
+        </div>
+
+        <div class="endpoint" id="async">
+            <h2>🔄 Async Endpoints</h2>
+            
+            <h3>POST /v1/async/submit</h3>
+            <p>Envía un prompt para procesamiento asíncrono. Devuelve task_id inmediatamente.</p>
+            <pre><code>{
+  "task_id": "abc-123-def",
+  "status": "pending",
+  "message": "Task submitted successfully"
+}</code></pre>
+
+            <h3>GET /v1/async/result/{task_id}</h3>
+            <p>Consulta el resultado. El estado puede ser: pending, processing, completed, failed.</p>
+            <pre><code>{
+  "task_id": "abc-123-def",
+  "status": "completed",
+  "result": { ... }
+}</code></pre>
+        </div>
+
+        <div class="endpoint" id="batch">
+            <h2>📦 POST /v1/prompts/batch</h2>
+            <p><span class="method post">POST</span> <span class="path">/v1/prompts/batch</span></p>
+            <p>Ejecuta hasta 100 prompts en una sola petición (alto rendimiento).</p>
+            <pre><code>{
+  "prompts": [
+    {"user_id": "...", "content": "First prompt"},
+    {"user_id": "...", "content": "Second prompt"}
+  ]
+}</code></pre>
+        </div>
+
+        <div class="endpoint" id="audit">
+            <h2>📋 GET /v1/audit/logs</h2>
+            <p><span class="method get">GET</span> <span class="path">/v1/audit/logs?user_id=...&start_date=2024-01-01&limit=100</span></p>
+            <p>Retrieve Registros de Auditoría with temporal filters. Los datos sensibles están cifrados en reposo.</p>
+            
+            <h3>Parámetros de Consulta</h3>
+            <table>
+                <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+                <tr><td>user_id</td><td>UUID</td><td>Filtrar por usuario (requiere rol de administrador)</td></tr>
+                <tr><td>start_date</td><td>ISO date</td><td>YYYY-MM-DD format</td></tr>
+                <tr><td>end_date</td><td>ISO date</td><td>YYYY-MM-DD format</td></tr>
+                <tr><td>limit</td><td>int</td><td>Máximo 1000 registros</td></tr>
+            </table>
+        </div>
+
+        <div class="endpoint" id="gdpr">
+            <h2>🗑️ DELETE /v1/audit/users/{user_id}/data</h2>
+            <p><span class="method delete">DELETE</span> <span class="path">/v1/audit/users/{user_id}/data?confirmation=true</span></p>
+            <p><strong>Derecho al Olvido GDPR</strong> - Elimina permanentemente todos los datos asociados a un usuario.</p>
+            <div style="background: #ffebee; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                ⚠️ <strong>IRREVERSIBLE</strong> - Esta acción no se puede deshacer. Requiere confirmation=true.
+            </div>
+        </div>
+
+        <div class="endpoint" id="health">
+            <h2>❤️ Endpoints de Salud</h2>
+            <p><span class="method get">GET</span> <span class="path">/health</span> - Sonda de actividad</p>
+            <p><span class="method get">GET</span> <span class="path">/ready</span> - Sonda de preparación (checks DB + Redis)</p>
+            <p><span class="method get">GET</span> <span class="path">/metrics</span> - Endpoint de métricas Prometheus</p>
+        </div>
+
+        <div class="endpoint" id="errors">
+            <h2>⚠️ Códigos de Error</h2>
+            <table>
+                <tr><th>Code</th><th>HTTP Status</th><th>Description</th></tr>
+                <tr><td>VALIDATION_ERROR</td><td>400</td><td>Entrada inválida (prompt vacío, temperatura fuera de rango)</td></tr>
+                <tr><td>UNAUTHORIZED</td><td>401</td><td>Token JWT faltante o inválido</td></tr>
+                <tr><td>RATE_LIMITED</td><td>429</td><td>Demasiadas peticiones (100/min)</td></tr>
+                <tr><td>MODEL_INFERENCE_FAILED</td><td>500</td><td>API del modelo no disponible o tiempo de espera agotado</td></tr>
+                <tr><td>EXPIRED_DATA</td><td>410</td><td>Los datos han expirado (GDPR TTL)</td></tr>
+            </table>
+        </div>
+
+        <footer>
+            <p>Nemotron Superior - Plataforma Empresarial de IA Agentic</p>
+            <p><a href="api_es.html">🇪🇸 View in English</a> | <a href="https://github.com/dwight-trujillo/nemotron-superior">GitHub</a></p>
+        </footer>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+    </script>
 </body>
 </html>
