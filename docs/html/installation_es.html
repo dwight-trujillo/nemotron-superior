@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Guía de Instalación - Nemotron Superior</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; max-width: 1000px; margin: 0 auto; padding: 40px; background: #f5f5f5; }
+        h1 { color: #1a1a2e; border-bottom: 3px solid #4caf50; padding-bottom: 10px; }
+        .step { background: white; border-radius: 12px; padding: 20px; margin: 20px 0; border-left: 4px solid #4caf50; }
+        code { background: #1e1e2e; color: #c9d1d9; padding: 2px 6px; border-radius: 4px; }
+        pre { background: #1e1e2e; color: #c9d1d9; padding: 15px; border-radius: 8px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🚀 Guía de Instalación Rápida</h1>
+
+    <div class="step">
+        <h2>📦 1. Requisitos previos</h2>
+        <ul>
+            <li>Docker 24+ y Docker Compose 2.20+</li>
+            <li>8GB RAM mínimo (16GB recomendado)</li>
+            <li>Python 3.12+ (para desarrollo local)</li>
+        </ul>
+    </div>
+
+    <div class="step">
+        <h2>🐳 2. Levantar con Docker (recomendado)</h2>
+        <pre><code>git clone https://github.com/dwight-trujillo/nemotron-superior.git
+cd nemotron-superior
+cp .env.example .env
+# Edita .env con tus valores
+docker-compose up -d</code></pre>
+    </div>
+
+    <div class="step">
+        <h2>🐍 3. Instalación local (desarrollo)</h2>
+        <pre><code>python -m venv venv
+source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate     # Windows
+pip install -r requirements.txt
+uvicorn src.infrastructure.web.app:app --reload</code></pre>
+    </div>
+
+    <div class="step">
+        <h2>🔧 4. Variables de entorno obligatorias</h2>
+        <pre><code>JWT_SECRET_KEY=tu-clave-secreta-minimo-32-caracteres
+ENCRYPTION_KEY=base64-encoded-32-byte-key
+DATABASE_URL=postgresql+asyncpg://user:pass@localhost:5432/nemotron
+REDIS_URL=redis://localhost:6379/0</code></pre>
+    </div>
+
+    <div class="step">
+        <h2>✅ 5. Verificar instalación</h2>
+        <pre><code>curl http://localhost:8000/health
+# Respuesta esperada: {"status":"healthy"}</code></pre>
+    </div>
+
+    <footer>
+        <a href="api_es.html">← Volver a API</a> | 
+        <a href="architecture_es.html">Ver Arquitectura</a>
+    </footer>
+</body>
+</html>
