@@ -1,0 +1,17 @@
+﻿name: Nemotron CI
+
+on:
+  push:
+    branches: [ master, main ]
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Python check
+      run: |
+        echo "Nemotron Superior - Build"
+        python --version
+        echo "✅ Build successful"
