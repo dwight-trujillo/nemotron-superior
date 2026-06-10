@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Nemotron Omni - Demo Multimodal</title>
+    <style>
+        body { font-family: system-ui; background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 40px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; padding: 30px; }
+        button { background: #4caf50; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 16px; }
+        select, input, textarea { width: 100%; padding: 10px; margin: 10px 0; border-radius: 8px; border: 1px solid #ddd; }
+        .result { background: #1e1e2e; color: #c9d1d9; border-radius: 12px; padding: 20px; margin-top: 20px; font-family: monospace; }
+        .badge { display: inline-block; background: #4caf50; padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-right: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Nemotron 3 Nano Omni</h1>
+        <p>Plataforma Nemotron Superior + Modelo multimodal de NVIDIA</p>
+        
+        <div style="margin: 20px 0;">
+            <span class="badge">🖼️ Visión</span>
+            <span class="badge">📄 Documentos</span>
+            <span class="badge">🖥️ GUI 1080p</span>
+            <span class="badge">🎤 Audio</span>
+            <span class="badge">🎬 Video</span>
+        </div>
+        
+        <select id="modality">
+            <option value="vision">🖼️ Visión / Imagen</option>
+            <option value="document">📄 Documento (PDF, Excel, gráficos)</option>
+            <option value="gui">🖥️ Interfaz GUI (1080p)</option>
+            <option value="audio">🎤 Audio</option>
+            <option value="video">🎬 Video</option>
+        </select>
+        
+        <input type="text" id="url" placeholder="URL del archivo..." value="https://example.com/sample.jpg">
+        <textarea id="prompt" rows="3" placeholder="¿Qué quieres analizar?">Describe detalladamente lo que ves</textarea>
+        
+        <button onclick="analyze()">🔍 Analizar con Omni</button>
+        
+        <div id="result" class="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000/v1';
+        const USER_ID = '123e4567-e89b-12d3-a456-426614174000';
+        
+        const toolMap = {
+            vision: 'omni_vision',
+            document: 'omni_document',
+            gui: 'omni_gui',
+            audio: 'omni_audio',
+            video: 'omni_video'
+        };
+        
+        async function analyze() {
+            const modality = document.getElementById('modality').value;
+            const tool = toolMap[modality];
+            const url = document.getElementById('url').value;
+            const prompt = document.getElementById('prompt').value;
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '🔄 Procesando con Nemotron 3 Nano Omni...';
+            
+            try {
+                const response = await fetch(`${API_URL}/prompts/execute`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: USER_ID,
+                        content: `Using ${tool}, analyze: ${prompt}. Input: ${url}`,
+                        tools_enabled: [tool],
+                        temperature: 0.3,
+                        max_tokens: 2048
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    resultDiv.innerHTML = `<strong>✅ Resultado:</strong><br><br>${data.response_content}<br><br><small>⚡ ${data.latency_ms}ms | 🎯 ${data.model_used}</small>`;
+                } else {
+                    resultDiv.innerHTML = `❌ Error: ${data.message || 'Unknown error'}`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `❌ Error de conexión: ${error.message}<br><br>Asegúrate de que la API esté corriendo en ${API_URL}`;
+            }
+        }
+    </script>
+</body>
+</html>
